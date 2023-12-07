@@ -1,0 +1,25 @@
+name: Movies workflow
+on:
+    push:
+        branches:
+            - main
+    puul_request:
+        branches:
+            - main
+    workflow_dispatch:
+    
+jobs:
+    job1:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: hello
+              run: echo "Hello"
+              shell: bash
+
+    job2:
+        runs-on: ubuntu-latest
+        steps:
+            - name: goodbye
+              run: echo "Bye"
+              shell: bash
