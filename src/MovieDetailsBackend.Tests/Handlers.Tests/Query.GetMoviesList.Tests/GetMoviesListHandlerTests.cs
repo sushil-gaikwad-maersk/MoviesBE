@@ -27,7 +27,7 @@
             var result = sut.Handle(requestQuery, new System.Threading.CancellationToken());
 
             // Assert
-            result.Result.Status.Should().Be(HttpStatusCode.Accepted);
+            result.Result.Status.Should().Be(HttpStatusCode.OK);
             result.Result.Movies.Should().BeEquivalentTo(moviesList.Movies);
         }
 
