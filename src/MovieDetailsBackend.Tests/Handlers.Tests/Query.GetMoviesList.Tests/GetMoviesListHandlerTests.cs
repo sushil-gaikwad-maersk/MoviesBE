@@ -44,7 +44,7 @@
 
             // Assert
             result.Result.Status.Should().Be(HttpStatusCode.NotFound);
-            result.Result.ErrorMessage.Should().BeEquivalentTo(MovieDetailsConstants.MoviesNotFoundMessage);
+            result.Result.ErrorMessage.Should().BeEquivalentTo(MovieDetailsConstants.MovieNotFoundMessage);
         }
 
         private void SetupOk()
