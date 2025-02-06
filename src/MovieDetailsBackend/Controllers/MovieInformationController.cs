@@ -1,60 +1,59 @@
-﻿namespace MovieDetailsBackend.Controllers
+﻿namespace MovieDetailsBackend.Controllers;
+
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using MovieDetailsBackend.Query.GetMovieInformation;
+using MovieDetailsBackend.Query.GetMoviesList;
+
+[Route("api/[controller]")]
+[ApiController]
+public class MovieInformationController : ControllerBase
 {
-    using MediatR;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
-    using MovieDetailsBackend.Query.GetMovieInformation;
-    using MovieDetailsBackend.Query.GetMoviesList;
+    private readonly ILogger<MovieInformationController> _logger;
 
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MovieInformationController : ControllerBase
+    private readonly IMediator _mediatr;
+
+    public MovieInformationController(
+        ILogger<MovieInformationController> logger,
+        IMediator mediatr)
     {
-        private readonly ILogger<MovieInformationController> _logger;
+        _logger = logger;
+        _mediatr = mediatr;
+    }
 
-        private readonly IMediator _mediatr;
+    /// <summary>
+    /// Gets List of movies
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult Get()
+    {
+        var response = _mediatr.Send(GetMoviesListQuery.Create());
+        _logger.LogInformation("Result - " + response?.Result?.Status);
 
-        public MovieInformationController(
-            ILogger<MovieInformationController> logger,
-            IMediator mediatr)
+        if (response.Result.Status == System.Net.HttpStatusCode.OK)
         {
-            _logger = logger;
-            _mediatr = mediatr;
+            return Ok(response);
         }
+        return NotFound();
+    }
 
-        /// <summary>
-        /// Gets List of movies
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult Get()
+    /// <summary>
+    /// Gets Movie Details / Information based on Title
+    /// </summary>
+    /// <param name="movieTitle"></param>
+    /// <returns></returns>
+    [HttpGet("GetMovieInformation/{movieTitle}")]
+    public IActionResult Get(string movieTitle)
+    {
+        var response = _mediatr.Send(GetMovieInformationQuery.Create(movieTitle));
+        _logger.LogInformation("Result - " + response?.Result?.Status);
+
+        if (response.Result.Status == System.Net.HttpStatusCode.OK)
         {
-            var response = _mediatr.Send(GetMoviesListQuery.Create());
-            _logger.LogInformation("Result - " + response?.Result?.Status);
-
-            if (response.Result.Status == System.Net.HttpStatusCode.OK)
-            {
-                return Ok(response);
-            }
-            return NotFound();
+            return Ok(response);
         }
-
-        /// <summary>
-        /// Gets Movie Details / Information based on Title
-        /// </summary>
-        /// <param name="movieTitle"></param>
-        /// <returns></returns>
-        [HttpGet("GetMovieInformation/{movieTitle}")]
-        public IActionResult Get(string movieTitle)
-        {
-            var response = _mediatr.Send(GetMovieInformationQuery.Create(movieTitle));
-            _logger.LogInformation("Result - " + response?.Result?.Status);
-
-            if (response.Result.Status == System.Net.HttpStatusCode.OK)
-            {
-                return Ok(response);
-            }
-            return NotFound();
-        }
+        return NotFound();
     }
 }

@@ -40,7 +40,7 @@
             return Task.FromResult(new MoviesListResponse
             {
                 Status = HttpStatusCode.NotFound,
-                ErrorMessage = MovieDetailsConstants.MoviesNotFoundMessage
+                ErrorMessage = MovieDetailsConstants.MovieNotFoundMessage
             });
         }
     }
